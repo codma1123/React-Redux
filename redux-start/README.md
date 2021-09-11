@@ -1,70 +1,119 @@
-# Getting Started with Create React App
+# Redux
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## action
 
-## Available Scripts
+Create <strong>action</strong>s through action constructors. <br/>
+Send the created <strong>action</strong> object to the redux store. <br/>
+When the redux store receives an <strong>action</strong> object, the state value of the store is changed. <br/>
+The component using the state is changed by the changed state value <br/>
 
-In the project directory, you can run:
+<strong>Actions are some kind of input to the store.</strong>
 
-### `npm start`
+## reducer
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+When you give an action, that action is applied to create a different result. <br/>
+<strong>It is Pure Function Immutable</strong>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```js
+function reducer(previousState, action){ return newState; } 
+```
 
-### `npm test`
+## Usage
+in store.js
+```js
+const store = createStore(reducer)
+export default store
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+in App.js
+```js
+import store from './redux/store
+```
+## store methods
+```js
+store.getState()
+```
+Get the current store state
 
-### `npm run build`
+```js
+store.dispatch(action)
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Change the state of the store by putting an action
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+const unsubscribe = store.subscribe(()=>{})
+```
 
-### `npm run eject`
+When the state of the store changes, the arrow function is executed.<br/>
+unsubscribe() removes the subscribing function
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## combineReducers
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```js
+const reducer = combineReducers({
+  todos,
+  filter
+})
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Separate reducers and combine them. <br/>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+The divided reducers process actions by accessing different states.
 
-## Learn More
+## Ducks Pattern
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### not useing createActions 
+```js
+// define action type
+const SHOW_ALL = 'redux-start/filter/SHOW_ALL'
+const SHOW_COMPLETE = 'redux-start/filter/SHOW_COMPLETE'
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+// action create function
+export function showAll(){
+  return {
+    type: SHOW_ALL
+  }
+}
+export function showComplete(){
+  return {
+    type: SHOW_COMPLETE
+  }
+}
 
-### Code Splitting
+// init
+const initialState = "ALL"
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+// reducer
+export default function reducer(previousState = initialState, action){
 
-### Analyzing the Bundle Size
+  if(action.type === SHOW_COMPLETE){
+    return 'COMPLETE'
+  }
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+  if(action.type === SHOW_ALL){
+    return 'ALL'
+  }
 
-### Making a Progressive Web App
+  return previousState;
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### using createActions
 
-### Advanced Configuration
+```js
+import {createActions, handleActions} from 'redux-actions'
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+export const {showAll, showComplete} = createActions('SHOW_ALL', 'SHOW_COMPLETE',{prefix: 'redux-start/filter'})
 
-### Deployment
+const initialState = "ALL"
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+const reducer = handleActions({
+  SHOW_ALL: ()=>'ALL',
+  SHOW_COMPLETE: ()=> 'COMPLETE'
+}, initialState, {prefix: 'redux-start/filter'})
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+// reducer
+export default reducer
+```
