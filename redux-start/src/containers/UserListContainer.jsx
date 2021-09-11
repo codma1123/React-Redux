@@ -2,7 +2,7 @@ import { useCallback } from "react"
 import { useDispatch } from "react-redux"
 import { useSelector } from "react-redux"
 import UserList from "../components/UserList"
-import { getUsersPromise, getUsersThunk } from "../redux/modules/users"
+import {getUsersThunk } from "../redux/modules/users"
 import axios from "axios"
 
 export default function UserListContainer(){
@@ -20,7 +20,7 @@ export default function UserListContainer(){
   // },[dispatch])
 
   const getUsers = useCallback(()=>{
-    dispatch(getUsersPromise())
+    dispatch(getUsersThunk())
   },[dispatch])
 
   return <UserList users={users} getUsers={getUsers}/>

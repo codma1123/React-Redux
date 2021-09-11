@@ -15,13 +15,12 @@ import {addTodo} from '../redux/modules/todos'
 
 
 export default function TodoFormContainer(){
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const add = useCallback((text)=>{
     dispatch(addTodo(text))
   },
   [dispatch])
-
 
   return <TodoForm add={add} />
 }

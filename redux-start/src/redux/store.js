@@ -1,8 +1,17 @@
-import { applyMiddleware, createStore } from "redux";
+import {
+  applyMiddleware,
+  createStore
+} from "redux";
 import todoApp from "./modules/reducer";
-import {composeWithDevTools} from 'redux-devtools-extension'
+import {
+  composeWithDevTools
+} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import promise from "redux-promise-middleware"
+import history from "../history"
+import { routerMiddleware } from "connected-react-router";
+import createSagaMiddleware from "@redux-saga/core";
+
 
 // function middleware1(store){
 //   console.log('middleware1', 0)
@@ -29,7 +38,16 @@ import promise from "redux-promise-middleware"
 //     }
 //   }
 // }
+const store = createStore(
+  todoApp,
+  composeWithDevTools(
+    applyMiddleware(
+    thunk.withExtraArgument({ history}),
+    promise, 
+    routerMiddleware(history),
+   )
+ )
+)
 
-const store = createStore(todoApp, composeWithDevTools(applyMiddleware(thunk,promise)))
 
 export default store;

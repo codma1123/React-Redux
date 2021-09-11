@@ -1,32 +1,13 @@
-// define action type
-const SHOW_ALL = 'redux-start/filter/SHOW_ALL'
-const SHOW_COMPLETE = 'redux-start/filter/SHOW_COMPLETE'
+import {createActions, handleActions} from 'redux-actions'
 
-// action create function
-export function showAll(){
-  return {
-    type: SHOW_ALL
-  }
-}
-export function showComplete(){
-  return {
-    type: SHOW_COMPLETE
-  }
-}
+export const {showAll, showComplete} = createActions('SHOW_ALL', 'SHOW_COMPLETE',{prefix: 'redux-start/filter'})
 
-// init
 const initialState = "ALL"
 
+const reducer = handleActions({
+  SHOW_ALL: ()=>'ALL',
+  SHOW_COMPLETE: ()=> 'COMPLETE'
+}, initialState, {prefix: 'redux-start/filter'})
+
 // reducer
-export default function reducer(previousState = initialState, action){
-
-  if(action.type === SHOW_COMPLETE){
-    return 'COMPLETE'
-  }
-
-  if(action.type === SHOW_ALL){
-    return 'ALL'
-  }
-
-  return previousState;
-}
+export default reducer

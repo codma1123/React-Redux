@@ -18,8 +18,11 @@ import TodoList from '../components/TodoList'
 
 //store에 연결하여 state를 꺼내서 필요한것을 props로 넣어줌
 function TodoListContainer(){
+
   const todos = useSelector((state)=>state.todos);
 
+  console.log("todoformrender")
   return <TodoList todos={todos}/>
+  
 }
 export default TodoListContainer
