@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import store from './redux/store'
-import {addTodo, completeTodo, showComplete} from './redux/actions'
 import {Provider} from 'react-redux'
 
 ReactDOM.render(
